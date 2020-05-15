@@ -1,3 +1,15 @@
+.blogTeaser {
+  margin-top: 6rem;
+}
+
+.read-more {
+  position: absolute;
+  right: 40%;
+}
+.trunc {
+  position: absolute;
+}
+
 .container-fluid {
     padding-top: 70px;
     padding-bottom: 70px;

@@ -10,6 +10,8 @@ const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pelle
 const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const posts = [];
+let truncPosts = [];
+const maxLength = 100;
 
 const app = express();
 
@@ -20,7 +22,16 @@ app.use(express.static("public"));
 
 
 app.get("/", function(req, res) {
-  res.render("home", {homeStartingContentEJS: homeStartingContent, posts: posts});
+  truncPosts = posts.slice();
+  truncPosts.forEach(function(post) {
+    if (post.content.length > maxLength) {
+      post.trunc = post.content.substring(0, maxLength) + " ...";
+    }
+    else {
+      post.trunc = post.content;
+    }
+  })
+  res.render("home", {homeStartingContentEJS: homeStartingContent, truncPosts: truncPosts});
 });
 
 app.get("/about", function(req, res) {
@@ -46,7 +57,6 @@ app.get("/posts/:postTitle", function(req,res) {
   posts.forEach(function(post) {
     const requestedPost = _.lowerCase(req.params.postTitle)
     if (requestedPost === _.lowerCase(post.title)) {
-      console.log("match found " + post.title);
       output = post;
     }});
 
@@ -54,9 +64,9 @@ app.get("/posts/:postTitle", function(req,res) {
     res.send("<h1>No such Title</h1>");
   }
   else {
-    const outputTitle = output.title;
-    const outputContent = output.content;
-    res.render("post", {outputTitle: outputTitle, outputContent: outputContent});
+    const title = output.title;
+    const content = output.content;
+    res.render("post", {title: title, content: content});
   }
   res.redirect("/compose");
 });

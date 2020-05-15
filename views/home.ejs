@@ -4,9 +4,13 @@
 
 <p> <%= homeStartingContentEJS  %>  </p>
 
-<% posts.forEach(function(post) { %>
-<h1> <%= post.title %>  </h1>
-<p>  <%= post.content %>  </p>
+<% truncPosts.forEach(function(post) { %>
+
+<h1 class="blogTeaser"> <%= post.title %>  </h1>
+
+<p class="trunc">  <%= post.trunc %>  </p>
+<a class="read-more" href="/posts/<%= post.title %>">Read more</a>
+
 <% }); %>
 
 <%- include("partials/footer") -%>
